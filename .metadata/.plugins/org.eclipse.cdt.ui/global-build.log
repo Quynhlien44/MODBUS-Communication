@@ -1,0 +1,952 @@
+12:52:13 **** Rebuild of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\syscalls.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\syscalls.o 
+arm-atollic-eabi-gcc -c ..\src\tiny_printf.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\tiny_printf.o 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -g -Wa,--warn -x assembler-with-cpp -specs=nano.specs -o src\startup_stm32l152xe.o ..\src\startup_stm32l152xe.s 
+arm-atollic-eabi-gcc -c ..\src\system_stm32l1xx.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\system_stm32l1xx.o 
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+   2996	     12	   1052	   4060	    fdc	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+12:55:30 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+   2996	     12	   1052	   4060	    fdc	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+13:02:41 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+   2412	     12	   1056	   3480	    d98	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+Info: Nothing to build for template
+Info: Nothing to build for template
+13:07:31 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+   2104	     12	   1052	   3168	    c60	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+13:09:01 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+   2412	     12	   1056	   3480	    d98	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+13:31:39 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+   2420	     12	   1056	   3488	    da0	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+13:32:47 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+   2428	     12	   1056	   3496	    da8	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+13:38:21 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+   5120	      8	   1052	   6180	   1824	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+13:41:45 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+   2412	     12	   1056	   3480	    d98	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+11:13:55 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+   2532	     12	   1056	   3600	    e10	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+11:17:51 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+   2532	     12	   1056	   3600	    e10	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+11:18:53 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+   2412	     12	   1056	   3480	    d98	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+11:37:03 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+   2548	     12	   1056	   3616	    e20	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+Info: Nothing to build for template
+17:41:33 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+   2332	     12	   1052	   3396	    d44	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+17:44:15 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+   2260	     12	   1052	   3324	    cfc	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+17:49:42 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+   2260	     12	   1052	   3324	    cfc	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+17:55:02 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+   4428	     12	   1052	   5492	   1574	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+Info: Nothing to build for template
+Info: Nothing to build for template
+Info: Nothing to build for template
+09:01:19 **** Rebuild of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\tiny_printf.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\tiny_printf.o 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -g -Wa,--warn -x assembler-with-cpp -specs=nano.specs -o src\startup_stm32l152xe.o ..\src\startup_stm32l152xe.s 
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -c ..\src\syscalls.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\syscalls.o 
+arm-atollic-eabi-gcc -c ..\src\system_stm32l1xx.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\system_stm32l1xx.o 
+arm-atollic-eabi-gcc -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+   4428	     12	   1052	   5492	   1574	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+09:10:35 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+   4428	     12	   1052	   5492	   1574	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+09:23:29 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  12228	    476	   1068	  13772	   35cc	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+09:24:42 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  12228	    476	   1068	  13772	   35cc	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+15:38:06 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'main':
+..\src\main.c:77:26: warning: implicit declaration of function 'fabs' [-Wimplicit-function-declaration]
+    int temp_frac = (int)(fabs(temp_c - temp_int) * 100);
+                          ^~~~
+..\src\main.c:77:26: warning: incompatible implicit declaration of built-in function 'fabs'
+..\src\main.c:77:26: note: include '<math.h>' or provide a declaration of 'fabs'
+..\src\main.c:37:7: warning: unused variable 'result' [-Wunused-variable]
+   int result=0;
+       ^~~~~~
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  13772	    476	   1068	  15316	   3bd4	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+16:58:07 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'main':
+..\src\main.c:85:26: warning: implicit declaration of function 'fabs' [-Wimplicit-function-declaration]
+    int temp_frac = (int)(fabs(temp_c - temp_int) * 100);
+                          ^~~~
+..\src\main.c:85:26: warning: incompatible implicit declaration of built-in function 'fabs'
+..\src\main.c:85:26: note: include '<math.h>' or provide a declaration of 'fabs'
+..\src\main.c:37:7: warning: unused variable 'result' [-Wunused-variable]
+   int result=0;
+       ^~~~~~
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  13844	    476	   1068	  15388	   3c1c	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+18:25:51 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'main':
+..\src\main.c:71:9: warning: implicit declaration of function 'fmaxf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+         ^~~~~
+..\src\main.c:71:9: warning: incompatible implicit declaration of built-in function 'fmaxf'
+..\src\main.c:71:9: note: include '<math.h>' or provide a declaration of 'fmaxf'
+..\src\main.c:71:15: warning: implicit declaration of function 'fminf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+               ^~~~~
+..\src\main.c:71:15: warning: incompatible implicit declaration of built-in function 'fminf'
+..\src\main.c:71:15: note: include '<math.h>' or provide a declaration of 'fminf'
+..\src\main.c:119:1: error: expected declaration or statement at end of input
+ }
+ ^
+..\src\main.c:37:7: warning: unused variable 'result' [-Wunused-variable]
+   int result=0;
+       ^~~~~~
+At top level:
+..\src\main.c:114:6: warning: 'delay_Ms' defined but not used [-Wunused-function]
+ void delay_Ms(int delay)
+      ^~~~~~~~
+..\src\main.c:105:6: warning: 'USART2_read' defined but not used [-Wunused-function]
+ char USART2_read()
+      ^~~~~~~~~~~
+..\src\main.c:98:6: warning: 'USART2_write' defined but not used [-Wunused-function]
+ void USART2_write(char data)
+      ^~~~~~~~~~~~
+..\src\main.c:83:6: warning: 'USART2_Init' defined but not used [-Wunused-function]
+ void USART2_Init(void)
+      ^~~~~~~~~~~
+18:26:15 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'main':
+..\src\main.c:71:9: warning: implicit declaration of function 'fmaxf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+         ^~~~~
+..\src\main.c:71:9: warning: incompatible implicit declaration of built-in function 'fmaxf'
+..\src\main.c:71:9: note: include '<math.h>' or provide a declaration of 'fmaxf'
+..\src\main.c:71:15: warning: implicit declaration of function 'fminf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+               ^~~~~
+..\src\main.c:71:15: warning: incompatible implicit declaration of built-in function 'fminf'
+..\src\main.c:71:15: note: include '<math.h>' or provide a declaration of 'fminf'
+..\src\main.c:37:7: warning: unused variable 'result' [-Wunused-variable]
+   int result=0;
+       ^~~~~~
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  13744	    476	   1068	  15288	   3bb8	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+Info: Nothing to build for template
+Info: Nothing to build for template
+18:28:06 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'main':
+..\src\main.c:71:9: warning: implicit declaration of function 'fmaxf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+         ^~~~~
+..\src\main.c:71:9: warning: incompatible implicit declaration of built-in function 'fmaxf'
+..\src\main.c:71:9: note: include '<math.h>' or provide a declaration of 'fmaxf'
+..\src\main.c:71:15: warning: implicit declaration of function 'fminf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+               ^~~~~
+..\src\main.c:71:15: warning: incompatible implicit declaration of built-in function 'fminf'
+..\src\main.c:71:15: note: include '<math.h>' or provide a declaration of 'fminf'
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  13736	    476	   1068	  15280	   3bb0	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+Info: Nothing to build for template
+Info: Nothing to build for template
+Info: Nothing to build for template
+18:46:45 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'main':
+..\src\main.c:71:9: warning: implicit declaration of function 'fmaxf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+         ^~~~~
+..\src\main.c:71:9: warning: incompatible implicit declaration of built-in function 'fmaxf'
+..\src\main.c:71:9: note: include '<math.h>' or provide a declaration of 'fmaxf'
+..\src\main.c:71:15: warning: implicit declaration of function 'fminf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+               ^~~~~
+..\src\main.c:71:15: warning: incompatible implicit declaration of built-in function 'fminf'
+..\src\main.c:71:15: note: include '<math.h>' or provide a declaration of 'fminf'
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  13744	    476	   1068	  15288	   3bb8	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+18:50:49 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'main':
+..\src\main.c:71:9: warning: implicit declaration of function 'fmaxf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+         ^~~~~
+..\src\main.c:71:9: warning: incompatible implicit declaration of built-in function 'fmaxf'
+..\src\main.c:71:9: note: include '<math.h>' or provide a declaration of 'fmaxf'
+..\src\main.c:71:15: warning: implicit declaration of function 'fminf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+               ^~~~~
+..\src\main.c:71:15: warning: incompatible implicit declaration of built-in function 'fminf'
+..\src\main.c:71:15: note: include '<math.h>' or provide a declaration of 'fminf'
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  13872	    476	   1068	  15416	   3c38	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+18:52:56 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'main':
+..\src\main.c:71:9: warning: implicit declaration of function 'fmaxf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+         ^~~~~
+..\src\main.c:71:9: warning: incompatible implicit declaration of built-in function 'fmaxf'
+..\src\main.c:71:9: note: include '<math.h>' or provide a declaration of 'fmaxf'
+..\src\main.c:71:15: warning: implicit declaration of function 'fminf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+               ^~~~~
+..\src\main.c:71:15: warning: incompatible implicit declaration of built-in function 'fminf'
+..\src\main.c:71:15: note: include '<math.h>' or provide a declaration of 'fminf'
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  13920	    476	   1068	  15464	   3c68	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+18:54:07 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'main':
+..\src\main.c:71:9: warning: implicit declaration of function 'fmaxf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+         ^~~~~
+..\src\main.c:71:9: warning: incompatible implicit declaration of built-in function 'fmaxf'
+..\src\main.c:71:9: note: include '<math.h>' or provide a declaration of 'fmaxf'
+..\src\main.c:71:15: warning: implicit declaration of function 'fminf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+               ^~~~~
+..\src\main.c:71:15: warning: incompatible implicit declaration of built-in function 'fminf'
+..\src\main.c:71:15: note: include '<math.h>' or provide a declaration of 'fminf'
+..\src\main.c:78:4: error: expected ';' before 'for'
+    for (char *p = buf; *p; p++) USART2_write(*p);
+    ^~~
+18:54:11 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'main':
+..\src\main.c:71:9: warning: implicit declaration of function 'fmaxf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+         ^~~~~
+..\src\main.c:71:9: warning: incompatible implicit declaration of built-in function 'fmaxf'
+..\src\main.c:71:9: note: include '<math.h>' or provide a declaration of 'fmaxf'
+..\src\main.c:71:15: warning: implicit declaration of function 'fminf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+               ^~~~~
+..\src\main.c:71:15: warning: incompatible implicit declaration of built-in function 'fminf'
+..\src\main.c:71:15: note: include '<math.h>' or provide a declaration of 'fminf'
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  13792	    476	   1068	  15336	   3be8	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+19:11:25 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'main':
+..\src\main.c:52:16: error: 'ADC_CR2_CAL' undeclared (first use in this function)
+   ADC1->CR2 |= ADC_CR2_CAL;        // Calibrate
+                ^~~~~~~~~~~
+..\src\main.c:52:16: note: each undeclared identifier is reported only once for each function it appears in
+..\src\main.c:73:9: warning: implicit declaration of function 'fmaxf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+         ^~~~~
+..\src\main.c:73:9: warning: incompatible implicit declaration of built-in function 'fmaxf'
+..\src\main.c:73:9: note: include '<math.h>' or provide a declaration of 'fmaxf'
+..\src\main.c:73:15: warning: implicit declaration of function 'fminf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+               ^~~~~
+..\src\main.c:73:15: warning: incompatible implicit declaration of built-in function 'fminf'
+..\src\main.c:73:15: note: include '<math.h>' or provide a declaration of 'fminf'
+..\src\main.c:80:58: warning: implicit declaration of function 'abs' [-Wimplicit-function-declaration]
+    sprintf(buf, "Humidity: %d.%d%%\r\n", rh_scaled / 10, abs(rh_scaled % 10));
+                                                          ^~~
+19:11:32 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'main':
+..\src\main.c:52:16: error: 'ADC_CR2_CAL' undeclared (first use in this function)
+   ADC1->CR2 |= ADC_CR2_CAL;        // Calibrate
+                ^~~~~~~~~~~
+..\src\main.c:52:16: note: each undeclared identifier is reported only once for each function it appears in
+..\src\main.c:73:9: warning: implicit declaration of function 'fmaxf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+         ^~~~~
+..\src\main.c:73:9: warning: incompatible implicit declaration of built-in function 'fmaxf'
+..\src\main.c:73:9: note: include '<math.h>' or provide a declaration of 'fmaxf'
+..\src\main.c:73:15: warning: implicit declaration of function 'fminf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+               ^~~~~
+..\src\main.c:73:15: warning: incompatible implicit declaration of built-in function 'fminf'
+..\src\main.c:73:15: note: include '<math.h>' or provide a declaration of 'fminf'
+..\src\main.c:80:58: warning: implicit declaration of function 'abs' [-Wimplicit-function-declaration]
+    sprintf(buf, "Humidity: %d.%d%%\r\n", rh_scaled / 10, abs(rh_scaled % 10));
+                                                          ^~~
+19:12:51 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'main':
+..\src\main.c:78:9: warning: implicit declaration of function 'fmaxf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+         ^~~~~
+..\src\main.c:78:9: warning: incompatible implicit declaration of built-in function 'fmaxf'
+..\src\main.c:78:9: note: include '<math.h>' or provide a declaration of 'fmaxf'
+..\src\main.c:78:15: warning: implicit declaration of function 'fminf' [-Wimplicit-function-declaration]
+    rh = fmaxf(fminf(rh, 100.0f), 0.0f); // Clamp to 0-100%
+               ^~~~~
+..\src\main.c:78:15: warning: incompatible implicit declaration of built-in function 'fminf'
+..\src\main.c:78:15: note: include '<math.h>' or provide a declaration of 'fminf'
+..\src\main.c:85:58: warning: implicit declaration of function 'abs' [-Wimplicit-function-declaration]
+    sprintf(buf, "Humidity: %d.%d%%\r\n", rh_scaled / 10, abs(rh_scaled % 10));
+                                                          ^~~
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  13952	    476	   1068	  15496	   3c88	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+09:41:08 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  13664	    476	   1068	  15208	   3b68	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+09:42:52 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'main':
+..\src\main.c:79:58: warning: implicit declaration of function 'abs' [-Wimplicit-function-declaration]
+    sprintf(buf, "Humidity: %d.%d%%\r\n", rh_scaled / 10, abs(rh_scaled % 10));
+                                                          ^~~
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  13912	    476	   1068	  15456	   3c60	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+13:54:38 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'I2C1_SimpleRead':
+..\src\main.c:87:18: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
+     volatile int tmp;
+                  ^~~
+..\src\main.c: In function 'I2C1_Write':
+..\src\main.c:153:15: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
+  volatile int tmp;
+               ^~~
+..\src\main.c: In function 'I2C1_ByteWrite':
+..\src\main.c:183:15: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
+  volatile int tmp;
+               ^~~
+..\src\main.c: In function 'I2C1_Read':
+..\src\main.c:206:15: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
+  volatile int tmp;
+               ^~~
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  12708	    476	   1068	  14252	   37ac	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+13:58:18 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'read_7_bytes_from_usartx':
+..\src\main.c:290:10: warning: array subscript has type 'char' [-Wchar-subscripts]
+     frame[i]=*received_frame;
+          ^
+..\src\main.c:284:7: warning: variable 'frame' set but not used [-Wunused-but-set-variable]
+  char frame[8]={0};
+       ^~~~~
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  12908	    476	   1072	  14456	   3878	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+14:00:34 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'read_7_bytes_from_usartx':
+..\src\main.c:291:10: warning: array subscript has type 'char' [-Wchar-subscripts]
+     frame[i]=*received_frame;
+          ^
+..\src\main.c:285:7: warning: variable 'frame' set but not used [-Wunused-but-set-variable]
+  char frame[8]={0};
+       ^~~~~
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  12916	    476	   1072	  14464	   3880	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+14:04:56 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'read_7_bytes_from_usartx':
+..\src\main.c:282:10: warning: array subscript has type 'char' [-Wchar-subscripts]
+     frame[i]=*received_frame;
+          ^
+..\src\main.c:276:7: warning: variable 'frame' set but not used [-Wunused-but-set-variable]
+  char frame[8]={0};
+       ^~~~~
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  13476	    476	   1072	  15024	   3ab0	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+Info: Nothing to build for template
+Info: Nothing to build for template
+Info: Nothing to build for template
+14:12:40 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'read_7_bytes_from_usartx':
+..\src\main.c:290:10: warning: array subscript has type 'char' [-Wchar-subscripts]
+     frame[i]=*received_frame;
+          ^
+..\src\main.c:284:7: warning: variable 'frame' set but not used [-Wunused-but-set-variable]
+  char frame[8]={0};
+       ^~~~~
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  12908	    476	   1072	  14456	   3878	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+14:22:26 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'read_7_bytes_from_usartx':
+..\src\main.c:279:10: warning: array subscript has type 'char' [-Wchar-subscripts]
+     frame[i]=*received_frame;
+          ^
+..\src\main.c:273:7: warning: variable 'frame' set but not used [-Wunused-but-set-variable]
+  char frame[8]={0};
+       ^~~~~
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  13788	    476	   1072	  15336	   3be8	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+Info: Nothing to build for template
+Info: Nothing to build for template
+Info: Nothing to build for template
+Info: Nothing to build for template
+15:01:29 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+..\src\main.c: In function 'read_7_bytes_from_usartx':
+..\src\main.c:279:15: warning: array subscript has type 'char' [-Wchar-subscripts]
+          frame[i] = *received_frame;
+               ^
+..\src\main.c:281:61: warning: array subscript has type 'char' [-Wchar-subscripts]
+          sprintf(buffer, "Byte %d: 0x%02X\r\n", i + 1, frame[i]);
+                                                             ^
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  13916	    476	   1072	  15464	   3c68	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+15:03:30 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  13196	    476	   1084	  14756	   39a4	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+15:05:05 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  13692	    476	   1084	  15252	   3b94	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+Info: Nothing to build for template
+15:06:49 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  13284	    476	   1084	  14844	   39fc	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+15:10:40 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  13124	    476	   1084	  14684	   395c	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+15:12:54 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  13284	    476	   1084	  14844	   39fc	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+15:36:11 **** Incremental Build of configuration Debug for project template ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c ..\src\main.c -mthumb -mcpu=cortex-m3 -std=gnu11 -DSTM32L152xE -I../src -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L1xx/Include -I../Drivers/STM32L1xx_HAL_Driver/Inc -O0 -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o src\main.o 
+arm-atollic-eabi-gcc -u_printf_float -o template.elf src\main.o src\startup_stm32l152xe.o src\syscalls.o src\system_stm32l1xx.o src\tiny_printf.o -mthumb -mcpu=cortex-m3 -T../stm32_flash.ld -specs=nosys.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=template.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list template.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  13284	    476	   1084	  14844	   39fc	template.elf
+Print size information done
+Generate listing file
+Output sent to: template.list
+Generate listing file done
+Generate build reports done
+Info: Nothing to build for template
+Info: Nothing to build for template
+Info: Nothing to build for template

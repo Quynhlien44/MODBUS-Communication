@@ -1,0 +1,201 @@
+#include "stm32l1xx.h"
+#define HSI_VALUE    ((uint32_t)16000000)
+#include "nucleo152start.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+#define SLAVE_ADDRESS 0x01
+#define INPUT_REGISTER 0x01
+
+volatile char rx_buffer[8];
+volatile int rx_index = 0;
+volatile char mFlag = 0;
+
+void delay_Ms(int delay);
+void USART1_write(char data);
+void USART2_write(char data);
+void USART1_Init(void);
+void USART2_Init(void);
+void wrong_slave_address(void);
+char USART1_read(void);
+unsigned short int CRC16(char *nData, unsigned short int wLength);
+void respond_frame(int sensor_value);
+void USART2_write_string(const char* str);
+int read_sensor(int input_address);
+
+int main(void) {
+    __disable_irq();
+    USART1_Init();
+    USART2_Init();
+    SetSysClock();
+    SystemCoreClockUpdate();
+
+    USART2_write_string("Program started\r\n");
+
+    USART1->CR1 |= 0x0020;  // Enable RX interrupt
+    NVIC_EnableIRQ(USART1_IRQn);
+    __enable_irq();
+
+    RCC->AHBENR |= 1;  // GPIOA clock
+    GPIOA->MODER &= ~0x00000C00;  // Clear PA5
+    GPIOA->MODER |= 0x400;  // PA5 output
+
+    RCC->APB2ENR |= 0x00000200;  // ADC1 clock
+    ADC1->SQR5 = 0;  // Channel 0
+    ADC1->CR2 = 0;  // Single conversion, right align
+    ADC1->SMPR3 = 7;  // 384 cycles
+    ADC1->CR1 &= ~0x03000000;  // 12-bit resolution
+    ADC1->CR2 |= 1;  // ADC on
+
+    while (1) {
+        char buffer[20];
+        sprintf(buffer, "mFlag: %d\r\n", mFlag);
+        USART2_write_string(buffer);
+        if (mFlag == 1) {
+            char received_frame[8];
+            for (int i = 0; i < 8; i++) {
+                received_frame[i] = rx_buffer[i];
+            }
+            USART2_write_string("Full frame received\r\n");
+            unsigned short int crc = CRC16(received_frame, 6);
+            char crc_high_byte = crc >> 8;
+            char crc_low_byte = crc;
+            if ((received_frame[7] == crc_high_byte) && (received_frame[6] == crc_low_byte)) {
+                USART2_write_string("CRC check passed\r\n");
+                if (received_frame[3] == INPUT_REGISTER) {
+                    int sensor_value = read_sensor(INPUT_REGISTER);
+                    respond_frame(sensor_value);
+                }
+            } else {
+                USART2_write_string("CRC check failed\r\n");
+            }
+            mFlag = 0;
+            rx_index = 0;
+            USART1->CR1 |= 0x0020;  // Re-enable RX interrupt
+        } else if (mFlag == 2) {
+            wrong_slave_address();
+        }
+        delay_Ms(100);  // Slow down the loop for readability
+    }
+    return 0;
+}
+
+void USART1_IRQHandler(void) {
+    if (USART1->SR & 0x0020) {
+        rx_buffer[rx_index] = USART1->DR;
+        char buffer[20];
+        sprintf(buffer, "Received byte %d: 0x%02X\r\n", rx_index + 1, rx_buffer[rx_index]);
+        USART2_write_string(buffer);
+        rx_index++;
+        if (rx_index == 1 && rx_buffer[0] == SLAVE_ADDRESS) {
+            USART2_write_string("Slave address match\r\n");
+        } else if (rx_index == 1) {
+            USART2_write_string("Slave address mismatch\r\n");
+        }
+        if (rx_index == 8) {
+            mFlag = (rx_buffer[0] == SLAVE_ADDRESS) ? 1 : 2;
+            USART2_write_string("Setting mFlag\r\n");
+            rx_index = 0;
+            USART1->CR1 &= ~0x0020;  // Disable RX interrupt
+        }
+    }
+}
+
+void delay_Ms(int delay) {
+    int i = 0;
+    for (; delay > 0; delay--)
+        for (i = 0; i < 2460; i++);
+}
+
+void USART1_Init(void) {
+    RCC->APB2ENR |= (1 << 14);  // USART1 EN
+    RCC->AHBENR |= 0x00000001;  // GPIOA EN
+    GPIOA->AFR[1] = 0x00000700;  // PA9 AF7
+    GPIOA->AFR[1] |= 0x00000070;  // PA10 AF7
+    GPIOA->MODER |= 0x00080000;  // PA9 (TX)
+    GPIOA->MODER |= 0x00200000;  // PA10 (RX)
+    USART1->BRR = 0x00000D05;  // 9600 baud
+    USART1->CR1 = 0x00000008 | 0x00000004 | 0x00002000;  // TX, RX, UART enable
+}
+
+void USART2_Init(void) {
+    RCC->APB1ENR |= 0x00020000;  // USART2 EN
+    RCC->AHBENR |= 0x00000001;  // GPIOA EN
+    GPIOA->AFR[0] = 0x00000700;  // PA2 AF7
+    GPIOA->AFR[0] |= 0x00007000;  // PA3 AF7
+    GPIOA->MODER |= 0x00000020;  // PA2 (TX)
+    GPIOA->MODER |= 0x00000080;  // PA3 (RX)
+    USART2->BRR = 0x00000D05;  // 9600 baud
+    USART2->CR1 = 0x00000008 | 0x00000004 | 0x00002000;  // TX, RX, UART enable
+}
+
+void USART1_write(char data) {
+    while (!(USART1->SR & 0x0080)) {}
+    USART1->DR = data;
+}
+
+void USART2_write(char data) {
+    while (!(USART2->SR & 0x0080)) {}
+    USART2->DR = data;
+}
+
+void USART2_write_string(const char* str) {
+    while (*str) {
+        USART2_write(*str++);
+    }
+}
+
+unsigned short int CRC16(char *nData, unsigned short int wLength) {
+    static const unsigned short int wCRCTable[] = {
+        0X0000, 0XC0C1, 0XC181, 0X0140, /* ... rest of table ... */ 0X4040
+    };
+    unsigned char nTemp;
+    unsigned short int wCRCWord = 0xFFFF;
+    while (wLength--) {
+        nTemp = *nData++ ^ wCRCWord;
+        wCRCWord >>= 8;
+        wCRCWord ^= wCRCTable[nTemp];
+    }
+    return wCRCWord;
+}
+
+char USART1_read(void) {
+    while (!(USART1->SR & 0x0020)) {}
+    return USART1->DR;
+}
+
+void wrong_slave_address(void) {
+    USART1->CR1 &= ~0x00000004;  // Disable RX
+    delay_Ms(10);
+    USART1->CR1 |= 0x00000004;  // Enable RX
+    USART1->CR1 |= 0x0020;  // Enable RX interrupt
+    mFlag = 0;
+    rx_index = 0;
+    USART2_write_string("Wrong slave address received\r\n");
+}
+
+int read_sensor(int input_address) {
+    int result = 0;
+    ADC1->CR2 |= 0x40000000;  // Start conversion
+    while (!(ADC1->SR & 2)) {}
+    result = ADC1->DR;
+    USART2_write_string("Sensor read\r\n");
+    return result;
+}
+
+void respond_frame(int sensor_value) {
+    GPIOA->ODR |= 0x20;
+    char respond_frame[7] = {SLAVE_ADDRESS, 0x04, 0x02, 0, 0, 0, 0};
+    respond_frame[3] = (sensor_value >> 8) & 0xFF;
+    respond_frame[4] = sensor_value & 0xFF;
+    unsigned short int crc = CRC16(respond_frame, 5);
+    respond_frame[5] = crc & 0xFF;  // Low byte
+    respond_frame[6] = (crc >> 8) & 0xFF;  // High byte
+    for (int i = 0; i < 7; i++) {
+        USART1_write(respond_frame[i]);
+    }
+    GPIOA->ODR &= ~0x20;
+    char buffer[20];
+    sprintf(buffer, "ADC Value: %d\r\n", sensor_value);
+    USART2_write_string(buffer);
+}
