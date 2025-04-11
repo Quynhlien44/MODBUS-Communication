@@ -1,408 +1,517 @@
+/* Includes */
 #include "stm32l1xx.h"
-#define HSI_VALUE ((uint32_t)16000000)
-#include "nucleo152start.h"
+#define HSI_VALUE    ((uint32_t)16000000)
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+#include "include.h"
 
-// MODBUS and Sensor Register Definitions
 #define SLAVE_ADDRESS 0x01
-#define FREEZER_TEMP_REG 0x01
-#define OUTDOOR_TEMP_REG 0x02
-#define OUTDOOR_HUM_REG 0x03
-#define LIGHT_INTENSITY_REG 0x04
-#define BATHROOM_HUM_REG 0x05
-#define CO2_REG 0x06
-#define AC_VOLTAGE_REG 0x07
-#define ENERGY_REG 0x08
-#define SGP30_ADDRESS 0x58
+#define REG_DHT22_TEMP 0x01
+#define REG_DHT22_HUM  0x02
+#define REG_LMT84LP    0x03
+#define REG_NSL19M51   0x04
+#define REG_HIH4000    0x05
+#define REG_GROVE_VOC  0x06
+#define REG_GROVE_ECO2 0x07
+#define REG_AC_VOLTAGE 0x08
+#define REG_ENERGY_KWH 0x09
 
-// Function Prototypes
-void delay_Ms(int delay);
-void delay_Us(int delay);
-void USART1_Init(void);
-void USART2_Init(void);
-void I2C1_Init(void);
-void I2C1_Write(uint8_t address, uint8_t command, int n, uint8_t* data);
-void I2C1_SimpleRead(uint8_t address, int n, uint8_t* data);
-void USART1_write(char data);
-void USART2_write(char data);
-void USART2_write_string(const char* str);
-char USART1_read(void);
-char USART2_read(void);
-unsigned short int CRC16(char *nData, unsigned short int wLength);
-int read_sensor(int input_address);
-void respond_frame(int sensor_value);
-void wrong_slave_address(void);
-void read_dht22(int *temp, int *hum);
+/* Private typedef */
+/* Private define  */
+/* Private macro */
+/* Private variables */
+/* Private function prototypes */
+/* Private functions */
 
-// Global Variables
-volatile char rx_buffer[8];       // Buffer for MODBUS frame reception
-volatile int rx_index = 0;        // Index for received bytes
-volatile char mFlag = 0;          // MODBUS reception flag
-int sgp30_initialized = 0;        // CO2 sensor initialization flag
-volatile uint32_t pulse_count = 0;// Energy pulse counter
 
-int main(void) {
-    __disable_irq();
 
-    // Initialize peripherals
-    USART1_Init();  // MODBUS communication
-    USART2_Init();  // Debug output
-    I2C1_Init();    // For CO2 sensor
-    SetSysClock();
-    SystemCoreClockUpdate();
+/************************************************************************/
+/* Flags are volatile, since the flag value can change during interrupt */
+/* handler. Therefore compiler can handle it correctly.                 */
+/************************************************************************/
+volatile char mFlag=0; // 0: idle, 1: correct address, 2: wrong address
+volatile uint8_t neFlag = 0;
+volatile uint8_t frameFlag = 0;
+volatile uint8_t sensor_read_flag = 0; // Timer-based sensor read trigger
 
-    // Enable USART1 RX interrupt
-    USART1->CR1 |= 0x0020;
-    NVIC_EnableIRQ(USART1_IRQn);
-    __enable_irq();
+void TIM2_IRQHandler(void) {
+    if (TIM2->SR & TIM_SR_UIF) {
+        sensor_read_flag = 1; // Trigger sensor reading
+        TIM2->SR &= ~TIM_SR_UIF; // Clear interrupt flag
+    }
+}
 
-    // Clock enables
-    RCC->AHBENR |= 1;        // GPIOA clock
-    RCC->AHBENR |= 2;        // GPIOB clock for I2C
-    RCC->APB2ENR |= 1;       // SYSCFG clock for EXTI
+/*
+ * Clear buffer. This is used only for receiver buffer, hence fixed size (8 bytes)
+ */
+void clear_buffer(char *b)
+{
+	for (int i=0;i<8;i++)
+		b[i] = 0;
+}
 
-    // LED on PA5 (also used for MAX3485 DE)
-    GPIOA->MODER &= ~0x00000C00;
-    GPIOA->MODER |= 0x00000400;
 
-    // ADC setup for PA0, PA1, PA2, PA3
-    RCC->APB2ENR |= 0x00000200; // ADC1 clock
-    ADC1->CR1 &= ~0x03000000;   // 12-bit resolution
-    ADC1->CR2 |= 1;             // ADC on
+#define led_on()	GPIOA->ODR|=0x20; //0010 0000 set bit 5. p186
+#define led_off()	GPIOA->ODR&=~0x20; //0000 0000 clear bit 5. p186
 
-    // Energy measurement on PA4 (EXTI4)
-    GPIOA->MODER &= ~0x00000300; // PA4 input
-    SYSCFG->EXTICR[1] &= ~0x000F;// PA4 for EXTI4
-    EXTI->IMR |= 0x0010;         // Unmask EXTI4
-    EXTI->FTSR |= 0x0010;        // Falling edge trigger
-    NVIC_EnableIRQ(EXTI4_IRQn);
 
-    // I2C pins for CO2 sensor (PB8 SCL, PB9 SDA)
-    GPIOB->AFR[1] &= ~0x000000FF;
-    GPIOB->AFR[1] |= 0x00000044; // AF4 for I2C1
-    GPIOB->MODER &= ~0x000F0000;
-    GPIOB->MODER |= 0x000A0000;  // Alternate function
-    GPIOB->OTYPER |= 0x00000300; // Open-drain
-    GPIOB->PUPDR &= ~0x000F0000; // No pull-up/pull-down
+/**
+ **===========================================================================
+ **
+ **  Abstract: main program
+ **
+ **===========================================================================
+ */
 
-    USART2_write_string("Home Automation System Started\r\n");
 
-    while (1) {
-        if (mFlag == 1) {
-            // Validate CRC
-            unsigned short int crc = CRC16((char*)rx_buffer, 6);
-            char crc_low_byte = crc & 0xFF;
-            char crc_high_byte = (crc >> 8) & 0xFF;
+int main(void)
+{
+	__disable_irq();			//global disable IRQs, M3_Generic_User_Guide p135.
 
-            if ((rx_buffer[6] == crc_low_byte) && (rx_buffer[7] == crc_high_byte)) {
-                // Check function code (0x04) and quantity (1)
-                if (rx_buffer[1] == 0x04 && rx_buffer[4] == 0x00 && rx_buffer[5] == 0x01) {
-                    int input_address = rx_buffer[3];
-                    int sensor_value = read_sensor(input_address);
-                    respond_frame(sensor_value);
-                    USART2_write_string("MODBUS Response Sent\r\n");
-                } else {
-                    USART2_write_string("Unsupported Function Code or Quantity\r\n");
-                }
+	USART1_Init(); // ModBus
+	USART2_Init(); // Used as debugging terminal
+
+	/* Configure the system clock to 32 MHz and update SystemCoreClock */
+	SetSysClock();
+	SystemCoreClockUpdate();
+
+	TIM2_Init(); // Timer for sensor scheduling
+    LED_Init();
+
+
+	/* TODO - Add your application code here */
+
+
+	USART1->CR1 |= 0x0020;			//enable RX interrupt
+	NVIC_EnableIRQ(USART1_IRQn); 	//enable interrupt in NVIC
+	NVIC_EnableIRQ(TIM2_IRQn);
+	__enable_irq();					//global enable IRQs, M3_Generic_User_Guide p135
+
+	RCC->AHBENR|=1; 				//GPIOA ABH bus clock ON. p154
+	GPIOA->MODER&=~0x00000C00;		//clear (input reset state for PA5). p184
+	GPIOA->MODER|=0x400; 			//GPIOA pin 5 to output. p184
+
+	//setup ADC1. p272
+	RCC->APB2ENR|=0x00000200;		//enable ADC1 clock
+	ADC1->SQR5=0;					//conversion sequence starts at ch0
+	ADC1->CR2=0;					//bit 1=0: Single conversion mode, bit 11=0 align right
+	ADC1->SMPR3=7;				//384 cycles sampling time for channel 0 (longest)
+	ADC1->CR1&=~0x03000000;		//resolution 12-bit
+	ADC1->CR2|=1;					//bit 0, ADC on/off (1=on, 0=off)
+
+
+	char received_frame[8]={0};
+	/* Infinite loop */
+	unsigned short int crc=0; //16 bitts
+	char crc_high_byte=0;
+	char crc_low_byte=0;
+
+	char *framingErrorString = "Framing Error Detected";
+	char *noiseErrorString = "Noise Error Detected";
+
+	// Sensor data
+    uint16_t dht22_temp = 0, dht22_hum = 0, grove_voc = 0, grove_eco2 = 0;
+    uint16_t c_sum = 0;
+    signed char dht22_minus = 1;
+    int lmt84lp_temp = 0, nsl19m51_light = 0, hih4000_hum = 0;
+    int ac_voltage = 0, energy_kwh = 0;
+
+    char received_frame[8] = {0};
+    char error_msg[30];
+
+	USART1_IRQHandler();
+
+	while (1)
+	{
+		if (frameFlag == 1)
+		{
+			/* Here we have encountered a framing erorr. I tshould not occur, but if it does, here we handle it */
+			write_debug_msg(framingErrorString, 22);
+			frameFlag = 0;
+			clear_buffer(received_frame);
+		}
+		if (neFlag == 1)
+		{
+			/* If we have noise error in communication, we handle it here */
+			write_debug_msg(noiseErrorString, 22);
+			neFlag = 0;
+			clear_buffer(received_frame);
+		}
+		// Periodic sensor reading
+        if (sensor_read_flag) {
+            // Read DHT22
+            read_dht22_humidity_and_temperature(&dht22_temp, &dht22_hum, &c_sum, &dht22_minus);
+            if (c_sum) {
+                dht22_temp *= dht22_minus;
             } else {
-                USART2_write_string("CRC Check Failed\r\n");
+                dht22_temp = dht22_hum = -9999; // Error value
             }
-            mFlag = 0;
-            rx_index = 0;
-            USART1->CR1 |= 0x0020; // Re-enable RX interrupt
-        } else if (mFlag == 2) {
-            wrong_slave_address();
+
+            // Read other sensors
+            lmt84lp_temp = read_lmt84lp_temperature();
+            nsl19m51_light = read_nsl19m51_light();
+            hih4000_hum = read_hih4000_humidity();
+            read_grove_voc_eco2(&grove_voc, &grove_eco2);
+            ac_voltage = read_ac_voltage();
+            energy_kwh = read_energy_kwh();
+
+            // Control logic (e.g., turn off appliances if CO2 > 1000 ppm or energy > 10 kWh)
+            control_energy(grove_eco2, energy_kwh);
+
+            sensor_read_flag = 0;
         }
-    }
-    return 0;
-}
+		if(mFlag==1) //correct slave address
+		{
+			read_7_bytes_from_usartx(&received_frame[1]);
+			received_frame[0]=SLAVE_ADDRESS;
+			crc=CRC16(received_frame,6);
+			crc_high_byte=crc>>8|crc_high_byte; //high byte
+			crc_low_byte=crc|crc_low_byte; //low byte
 
-// Delay Functions
-void delay_Ms(int delay) {
-    for (; delay > 0; delay--)
-        for (int i = 0; i < 2460; i++);
-}
 
-void delay_Us(int delay) {
-    for (int i = 0; i < (delay * 2); i++) {
-        asm("nop");
-    }
-}
+			if (received_frame[6] == crc_low && received_frame[7] == crc_high) {
+                uint8_t reg = received_frame[3];
+                int value = -9999;
 
-// USART Initialization
-void USART1_Init(void) {
-    RCC->APB2ENR |= (1 << 14);  // USART1 clock
-    RCC->AHBENR |= 0x00000001;  // GPIOA clock
-    GPIOA->AFR[1] = 0x00000770; // PA9, PA10 AF7
-    GPIOA->MODER |= 0x00280000; // PA9, PA10 alternate function
-    USART1->BRR = 0x00000D05;   // 9600 baud @ 32MHz
-    USART1->CR1 = 0x0000200C;   // TE, RE, UE
-}
+                // Map register to sensor value
+                switch (reg) {
+                    case REG_DHT22_TEMP: value = dht22_temp; break;
+                    case REG_DHT22_HUM:  value = dht22_hum; break;
+                    case REG_LMT84LP:    value = lmt84lp_temp; break;
+                    case REG_NSL19M51:   value = nsl19m51_light; break;
+                    case REG_HIH4000:    value = hih4000_hum; break;
+                    case REG_GROVE_VOC:  value = grove_voc; break;
+                    case REG_GROVE_ECO2: value = grove_eco2; break;
+                    case REG_AC_VOLTAGE: value = ac_voltage; break;
+                    case REG_ENERGY_KWH: value = energy_kwh; break;
+                    default: break;
+                }
 
-void USART2_Init(void) {
-    RCC->APB1ENR |= 0x00020000; // USART2 clock
-    RCC->AHBENR |= 0x00000001;  // GPIOA clock
-    GPIOA->AFR[0] = 0x00007700; // PA2, PA3 AF7
-    GPIOA->MODER |= 0x000000A0; // PA2, PA3 alternate function
-    USART2->BRR = 0x00000D05;   // 9600 baud
-    USART2->CR1 = 0x0000200C;   // TE, RE, UE
-}
-
-// I2C Initialization and Functions
-void I2C1_Init(void) {
-    RCC->AHBENR |= 2;          // GPIOB clock
-    RCC->APB1ENR |= (1 << 21); // I2C1 clock
-    I2C1->CR1 = 0x8000;        // Software reset
-    I2C1->CR1 &= ~0x8000;
-    I2C1->CR2 = 0x0020;        // 32MHz peripheral clock
-    I2C1->CCR = 160;           // 100kHz I2C clock
-    I2C1->TRISE = 33;
-    I2C1->CR1 |= 0x0001;       // Enable I2C1
-}
-
-void I2C1_Write(uint8_t address, uint8_t command, int n, uint8_t* data) {
-    volatile int tmp;
-    while (I2C1->SR2 & 2) {}
-    I2C1->CR1 &= ~0x800;
-    I2C1->CR1 |= 0x100;
-    while (!(I2C1->SR1 & 1)) {}
-    I2C1->DR = address << 1;
-    while (!(I2C1->SR1 & 2)) {}
-    tmp = I2C1->SR2;
-    while (!(I2C1->SR1 & 0x80)) {}
-    I2C1->DR = command;
-    for (int i = 0; i < n; i++) {
-        while (!(I2C1->SR1 & 0x80)) {}
-        I2C1->DR = *data++;
-    }
-    while (!(I2C1->SR1 & 4)) {}
-    I2C1->CR1 |= (1 << 9);
-}
-
-void I2C1_SimpleRead(uint8_t address, int n, uint8_t* data) {
-    volatile int tmp;
-    while (I2C1->SR2 & 2) {}
-    I2C1->CR1 &= ~0x800;
-    I2C1->CR1 |= 0x100;
-    while (!(I2C1->SR1 & 1)) {}
-    I2C1->DR = (address << 1) | 1;
-    while (!(I2C1->SR1 & 2)) {}
-    tmp = I2C1->SR2;
-    I2C1->CR1 |= (1 << 10);
-    for (int i = 0; i < n; i++) {
-        if (i == n - 1) I2C1->CR1 &= ~(1 << 10);
-        while (!(I2C1->SR1 & 0x40)) {}
-        data[i] = I2C1->DR;
-    }
-    I2C1->CR1 |= (1 << 9);
-}
-
-// USART Read/Write Functions
-void USART1_write(char data) {
-    while (!(USART1->SR & 0x0080)) {}
-    USART1->DR = data;
-}
-
-void USART2_write(char data) {
-    while (!(USART2->SR & 0x0080)) {}
-    USART2->DR = data;
-}
-
-void USART2_write_string(const char* str) {
-    while (*str) {
-        USART2_write(*str++);
-    }
-}
-
-char USART1_read(void) {
-    while (!(USART1->SR & 0x0020)) {}
-    return USART1->DR;
-}
-
-char USART2_read(void) {
-    while (!(USART2->SR & 0x0020)) {}
-    return USART2->DR;
-}
-
-// CRC16 Calculation
-unsigned short int CRC16(char *nData, unsigned short int wLength) {
-    static const unsigned short int wCRCTable[] = {
-        0x0000, 0xC0C1, 0xC181, 0x0140, 0xC301, 0x03C0, 0x0280, 0xC241,
-        0xC601, 0x06C0, 0x0780, 0xC741, 0x0500, 0xC5C1, 0xC481, 0x0440,
-        0xCC01, 0x0CC0, 0x0D80, 0xCD41, 0x0F00, 0xCFC1, 0xCE81, 0x0E40,
-        0x0A00, 0xCAC1, 0xCB81, 0x0B40, 0xC901, 0x09C0, 0x0880, 0xC841,
-        0xD801, 0x18C0, 0x1980, 0xD941, 0x1B00, 0xDBC1, 0xDA81, 0x1A40,
-        0x1E00, 0xDEC1, 0xDF81, 0x1F40, 0xDD01, 0x1DC0, 0x1C80, 0xDC41,
-        0x1400, 0xD4C1, 0xD581, 0x1540, 0xD701, 0x17C0, 0x1680, 0xD641,
-        0xD201, 0x12C0, 0x1380, 0xD341, 0x1100, 0xD1C1, 0xD081, 0x1040,
-        0xF001, 0x30C0, 0x3180, 0xF141, 0x3300, 0xF3C1, 0xF281, 0x3240,
-        0x3600, 0xF6C1, 0xF781, 0x3740, 0xF501, 0x35C0, 0x3480, 0xF441,
-        0x3C00, 0xFCC1, 0xFD81, 0x3D40, 0xFF01, 0x3FC0, 0x3E80, 0xFE41,
-        0xFA01, 0x3AC0, 0x3B80, 0xFB41, 0x3900, 0xF9C1, 0xF881, 0x3840,
-        0x2800, 0xE8C1, 0xE981, 0x2940, 0xEB01, 0x2BC0, 0x2A80, 0xEA41,
-        0xEE01, 0x2EC0, 0x2F80, 0xEF41, 0x2D00, 0xEDC1, 0xEC81, 0x2C40,
-        0xE401, 0x24C0, 0x2580, 0xE541, 0x2700, 0xE7C1, 0xE681, 0x2640,
-        0x2200, 0xE2C1, 0xE381, 0x2340, 0xE101, 0x21C0, 0x2080, 0xE041,
-        0xA001, 0x60C0, 0x6180, 0xA141, 0x6300, 0xA3C1, 0xA281, 0x6240,
-        0x6600, 0xA6C1, 0xA781, 0x6740, 0xA501, 0x65C0, 0x6480, 0xA441,
-        0x6C00, 0xACC1, 0xAD81, 0x6D40, 0xAF01, 0x6FC0, 0x6E80, 0xAE41,
-        0xAA01, 0x6AC0, 0x6B80, 0xAB41, 0x6900, 0xA9C1, 0xA881, 0x6840,
-        0x7800, 0xB8C1, 0xB981, 0x7940, 0xBB01, 0x7BC0, 0x7A80, 0xBA41,
-        0xBE01, 0x7EC0, 0x7F80, 0xBF41, 0x7D00, 0xBDC1, 0xBC81, 0x7C40,
-        0xB401, 0x74C0, 0x7580, 0xB541, 0x7700, 0xB7C1, 0xB681, 0x7640,
-        0x7200, 0xB2C1, 0xB381, 0x7340, 0xB101, 0x71C0, 0x7080, 0xB041,
-        0x5000, 0x90C1, 0x9181, 0x5140, 0x9301, 0x53C0, 0x5280, 0x9241,
-        0x9601, 0x56C0, 0x5780, 0x9741, 0x5500, 0x95C1, 0x9481, 0x5440,
-        0x9C01, 0x5CC0, 0x5D80, 0x9D41, 0x5F00, 0x9FC1, 0x9E81, 0x5E40,
-        0x5A00, 0x9AC1, 0x9B81, 0x5B40, 0x9901, 0x59C0, 0x5880, 0x9841,
-        0x8801, 0x48C0, 0x4980, 0x8941, 0x4B00, 0x8BC1, 0x8A81, 0x4A40,
-        0x4E00, 0x8EC1, 0x8F81, 0x4F40, 0x8D01, 0x4DC0, 0x4C80, 0x8C41,
-        0x4400, 0x84C1, 0x8581, 0x4540, 0x8701, 0x47C0, 0x4680, 0x8641,
-        0x8201, 0x42C0, 0x4380, 0x8341, 0x4100, 0x81C1, 0x8081, 0x4040
-    };
-    unsigned char nTemp;
-    unsigned short int wCRCWord = 0xFFFF;
-    while (wLength--) {
-        nTemp = *nData++ ^ wCRCWord;
-        wCRCWord >>= 8;
-        wCRCWord ^= wCRCTable[nTemp];
-    }
-    return wCRCWord;
-}
-
-// MODBUS Frame Handling
-void respond_frame(int sensor_value) {
-    GPIOA->ODR |= 0x20; // Enable MAX3485 driver (DE on PA5)
-    char respond_frame[7] = {SLAVE_ADDRESS, 0x04, 0x02, 0, 0, 0, 0};
-    respond_frame[3] = (sensor_value >> 8) & 0xFF;
-    respond_frame[4] = sensor_value & 0xFF;
-    unsigned short int crc = CRC16(respond_frame, 5);
-    respond_frame[5] = crc & 0xFF;
-    respond_frame[6] = (crc >> 8) & 0xFF;
-    for (int i = 0; i < 7; i++) {
-        USART1_write(respond_frame[i]);
-    }
-    GPIOA->ODR &= ~0x20; // Disable driver
-}
-
-void wrong_slave_address(void) {
-    mFlag = 0;
-    rx_index = 0;
-    USART1->CR1 |= 0x0020; // Re-enable RX interrupt
-    USART2_write_string("Wrong Slave Address Received\r\n");
-}
-
-// Interrupt Handlers
-void EXTI4_IRQHandler(void) {
-    if (EXTI->PR & 0x0010) {
-        pulse_count++;
-        EXTI->PR = 0x0010; // Clear pending bit
-    }
-}
-
-void USART1_IRQHandler(void) {
-    if (USART1->SR & 0x0020) {
-        rx_buffer[rx_index] = USART1->DR;
-        rx_index++;
-        if (rx_index == 8) {
-            mFlag = (rx_buffer[0] == SLAVE_ADDRESS) ? 1 : 2;
-            rx_index = 0;
-            USART1->CR1 &= ~0x0020; // Disable RX interrupt
-        }
-    }
-}
-
-// Sensor Reading Functions
-void read_dht22(int *temp, int *hum) {
-    uint8_t data[5] = {0};
-    GPIOA->MODER |= 0x1000;  // PA6 output
-    GPIOA->ODR &= ~0x40;     // Low
-    delay_Ms(1);
-    GPIOA->ODR |= 0x40;      // High
-    GPIOA->MODER &= ~0x3000; // PA6 input
-    while (GPIOA->IDR & 0x40) {}
-    while (!(GPIOA->IDR & 0x40)) {}
-    while (GPIOA->IDR & 0x40) {}
-    for (int i = 0; i < 40; i++) {
-        while (!(GPIOA->IDR & 0x40)) {}
-        delay_Us(40);
-        if (GPIOA->IDR & 0x40) {
-            data[i / 8] |= (1 << (7 - (i % 8)));
-        }
-        while (GPIOA->IDR & 0x40) {}
-    }
-    *hum = (data[0] << 8 | data[1]); // Humidity in 0.1%
-    int temp_val = (data[2] & 0x7F) << 8 | data[3]; // Temp in 0.1°C
-    if (data[2] & 0x80) temp_val = -temp_val;
-    *temp = temp_val;
-}
-
-int read_sensor(int input_address) {
-    switch (input_address) {
-        case FREEZER_TEMP_REG: // LMT84LP on PA0
-            ADC1->SQR5 = 0;
-            ADC1->CR2 |= 0x40000000;
-            while (!(ADC1->SR & 2)) {}
-            int result = ADC1->DR;
-            float voltage_mV = (result * 3300.0f) / 4095.0f; // No divider assumed
-            float temp_c = (1845.0f - voltage_mV) / 10.9f;
-            return (int)(temp_c * 100);
-
-        case OUTDOOR_TEMP_REG: // DHT22 temp on PA6
-        case OUTDOOR_HUM_REG:  // DHT22 humidity on PA6
-            int temp, hum;
-            read_dht22(&temp, &hum);
-            return (input_address == OUTDOOR_TEMP_REG) ? temp : hum;
-
-        case LIGHT_INTENSITY_REG: // NSL19M51 on PA1
-            ADC1->SQR5 = 1;
-            ADC1->CR2 |= 0x40000000;
-            while (!(ADC1->SR & 2)) {}
-            int result2 = ADC1->DR;
-            float voltage = (result2 / 4095.0f) * 3.3f;
-            float lux = voltage * 1000.0f; // Approximate
-            return (int)lux;
-
-        case BATHROOM_HUM_REG: // HIH-4000-001 on PA2
-            int sum = 0;
-            for (int i = 0; i < 10; i++) {
-                ADC1->SQR5 = 2;
-                ADC1->CR2 |= 0x40000000;
-                while (!(ADC1->SR & 2)) {}
-                sum += ADC1->DR;
-                delay_Ms(1);
+                if (value != -9999) {
+                    respond_frame(reg, value);
+                }
             }
-            int adc_value = sum / 10;
-            float vout = (adc_value / 4095.0f) * 3.3f;
-            float rh = (vout / 3.3f - 0.16f) / 0.0062f;
-            rh = fmaxf(fminf(rh, 100.0f), 0.0f);
-            return (int)(rh * 100);
+			crc=0;
+			crc_low_byte=0;
+			crc_high_byte=0;
+			mFlag=0;
+			//GPIOA->ODR|=0x20;				//0010 0000 or bit 5. p186
+			USART1->CR1 |= 0x0020;			//enable RX interrupt
+		}
+		else if(mFlag==2) //wrong slave address
+		{
+			wrong_slave_address();
+			mFlag = 0;
+			received_frame[0] = 0;
+		}
+	}
 
-        case CO2_REG: // SGP30 on I2C
-            if (!sgp30_initialized) {
-                uint8_t init_cmd_data[] = {0x03};
-                I2C1_Write(SGP30_ADDRESS, 0x20, 1, init_cmd_data);
-                delay_Ms(500);
-                sgp30_initialized = 1;
-            }
-            uint8_t measure_cmd_data[] = {0x08};
-            I2C1_Write(SGP30_ADDRESS, 0x20, 1, measure_cmd_data);
-            delay_Ms(12);
-            uint8_t data[6];
-            I2C1_SimpleRead(SGP30_ADDRESS, 6, data);
-            uint16_t eco2 = (data[3] << 8) | data[4];
-            return eco2; // ppm
-
-        case AC_VOLTAGE_REG: // Placeholder on PA3
-            return 0;
-
-        case ENERGY_REG: // Pulse counting on PA4
-            float energy_kwh = (float)pulse_count / 1000.0f; // 1000 pulses/kWh
-            return (int)(energy_kwh * 100);
-
-        default:
-            return 0;
-    }
+	return 0;
 }
+
+
+void TIM2_Init(void) {
+    RCC->APB1ENR |= RCC_APB1ENR_TIM2EN; // Enable TIM2 clock
+    TIM2->PSC = 32000 - 1; // 32 MHz / 32000 = 1 kHz
+    TIM2->ARR = 1000 - 1;  // 1 kHz / 1000 = 1 Hz (1-second interval)
+    TIM2->DIER |= TIM_DIER_UIE; // Enable update interrupt
+    TIM2->CR1 |= TIM_CR1_CEN;   // Enable timer
+}
+
+/**
+ * Initialize Modbus pins for UART1
+ */
+void USART1_Init(void)
+{
+	RCC->APB2ENR|=(1<<14);	 	//set bit 14 (USART1 EN) p.156
+	RCC->AHBENR|=0x00000001; 	//enable GPIOA port clock bit 0 (GPIOA EN)
+	GPIOA->AFR[1]=0x00000700;	//GPIOx_AFRL p.189,AF7 p.177 (AFRH10[3:0])
+	GPIOA->AFR[1]|=0x00000070;	//GPIOx_AFRL p.189,AF7 p.177 (AFRH9[3:0])
+	GPIOA->MODER|=0x00080000; 	//MODER2=PA9(TX)D8 to mode 10=alternate function mode. p184
+	GPIOA->MODER|=0x00200000; 	//MODER2=PA10(RX)D2 to mode 10=alternate function mode. p184
+
+	USART1->BRR = 0x00000D05;	//9600 BAUD and crystal 32MHz. p710, D05
+	USART1->CR1 = 0x00000008;	//TE bit. p739-740. Enable transmit
+	USART1->CR1 |= 0x00000004;	//RE bit. p739-740. Enable receiver
+	USART1->CR1 |= 0x00002000;	//UE bit. p739-740. Uart enable
+
+	USART1->CR1 |= USART_CR1_SBK; // SBK bit. Send break enabled
+
+	USART1->CR2 = 0x00; // reset
+
+	USART1->CR3 = 0;   // Set to default state
+	USART1->CR3 |= 1;  // Enable error interrupt,  p744
+	/* Error Interrupt Enable Bit is required to enable interrupt generation in case of a framing
+	error, overrun error or noise flag (FE=1 or ORE=1 or NF=1 in the USART_SR register) in
+	case of Multi Buffer Communication (DMAR=1 in the USART_CR3 register).
+	 */
+}
+
+/**
+ * Initialize TERMINAL pins for UART2, used for debugging
+ */
+void USART2_Init(void)
+{
+	RCC->APB1ENR|=0x00020000; 	//set bit 17 (USART2 EN)
+	RCC->AHBENR|=0x00000001; 	//enable GPIOA port clock bit 0 (GPIOA EN)
+	GPIOA->AFR[0]=0x00000700;	//GPIOx_AFRL p.188,AF7 p.177
+	GPIOA->AFR[0]|=0x00007000;	//GPIOx_AFRL p.188,AF7 p.177
+	GPIOA->MODER|=0x00000020; 	//MODER2=PA2(TX) to mode 10=alternate function mode. p184
+	GPIOA->MODER|=0x00000080; 	//MODER2=PA3(RX) to mode 10=alternate function mode. p184
+
+	USART2->BRR = 0x00000D05;	//9600 BAUD and crystal 32MHz. p710, D05
+	USART2->CR1 = 0x00000008;	//TE bit. p739-740. Enable transmit
+	USART2->CR1 |= 0x00000004;	//RE bit. p739-740. Enable receiver
+	USART2->CR1 |= 0x00002000;	//UE bit. p739-740. Uart enable
+}
+
+void USART1_write(char data)
+{
+	//wait while TX buffer is empty
+	while(!(USART1->SR&0x0080)){} 	//TXE: Transmit data register empty. p736-737
+	USART1->DR=(data);			//p739
+}
+
+void USART2_write(char data)
+{
+	//wait while TX buffer is empty
+	while(!(USART2->SR&0x0080)){} 	//TXE: Transmit data register empty. p736-737
+	USART2->DR=(data);			//p739
+}
+
+void USART1_IRQHandler(void)
+{
+	char received_slave_address=0;
+
+	/**
+	 * If there is framing error (physical) in the modbus, we raise a flag here. Since inside
+	 * IRQ handler actions should be simple and fast.  We will then investigate the flag in main()
+	 */
+	if (USART1->SR & USART_SR_FE)
+	{
+		frameFlag = 1;
+	}
+
+	/**
+	 * If there is noise error (physical) in the modbus, we raise a flag here. Since inside
+	 * IRQ handler actions should be simple and fast. We will then investigate the flag in main()
+	 */
+	if (USART1->SR & USART_SR_NE)
+	{
+		neFlag = 1;
+	}
+
+	if(USART1->SR & 0x0020) 		//if data available in DR register. p737
+	{
+		received_slave_address=USART1->DR;
+	}
+	if(received_slave_address==SLAVE_ADDRESS) //if we have right address
+	{
+		mFlag=1;
+
+	}
+	else
+	{
+		mFlag=2;
+
+
+	}
+	USART1->CR1 &= ~0x0020;			//disable RX interrupt
+
+}
+
+unsigned short int CRC16(char *nData,unsigned short int wLength)
+{
+	static const unsigned short int wCRCTable[] = {
+			0X0000, 0XC0C1, 0XC181, 0X0140, 0XC301, 0X03C0, 0X0280, 0XC241,
+			0XC601, 0X06C0, 0X0780, 0XC741, 0X0500, 0XC5C1, 0XC481, 0X0440,
+			0XCC01, 0X0CC0, 0X0D80, 0XCD41, 0X0F00, 0XCFC1, 0XCE81, 0X0E40,
+			0X0A00, 0XCAC1, 0XCB81, 0X0B40, 0XC901, 0X09C0, 0X0880, 0XC841,
+			0XD801, 0X18C0, 0X1980, 0XD941, 0X1B00, 0XDBC1, 0XDA81, 0X1A40,
+			0X1E00, 0XDEC1, 0XDF81, 0X1F40, 0XDD01, 0X1DC0, 0X1C80, 0XDC41,
+			0X1400, 0XD4C1, 0XD581, 0X1540, 0XD701, 0X17C0, 0X1680, 0XD641,
+			0XD201, 0X12C0, 0X1380, 0XD341, 0X1100, 0XD1C1, 0XD081, 0X1040,
+			0XF001, 0X30C0, 0X3180, 0XF141, 0X3300, 0XF3C1, 0XF281, 0X3240,
+			0X3600, 0XF6C1, 0XF781, 0X3740, 0XF501, 0X35C0, 0X3480, 0XF441,
+			0X3C00, 0XFCC1, 0XFD81, 0X3D40, 0XFF01, 0X3FC0, 0X3E80, 0XFE41,
+			0XFA01, 0X3AC0, 0X3B80, 0XFB41, 0X3900, 0XF9C1, 0XF881, 0X3840,
+			0X2800, 0XE8C1, 0XE981, 0X2940, 0XEB01, 0X2BC0, 0X2A80, 0XEA41,
+			0XEE01, 0X2EC0, 0X2F80, 0XEF41, 0X2D00, 0XEDC1, 0XEC81, 0X2C40,
+			0XE401, 0X24C0, 0X2580, 0XE541, 0X2700, 0XE7C1, 0XE681, 0X2640,
+			0X2200, 0XE2C1, 0XE381, 0X2340, 0XE101, 0X21C0, 0X2080, 0XE041,
+			0XA001, 0X60C0, 0X6180, 0XA141, 0X6300, 0XA3C1, 0XA281, 0X6240,
+			0X6600, 0XA6C1, 0XA781, 0X6740, 0XA501, 0X65C0, 0X6480, 0XA441,
+			0X6C00, 0XACC1, 0XAD81, 0X6D40, 0XAF01, 0X6FC0, 0X6E80, 0XAE41,
+			0XAA01, 0X6AC0, 0X6B80, 0XAB41, 0X6900, 0XA9C1, 0XA881, 0X6840,
+			0X7800, 0XB8C1, 0XB981, 0X7940, 0XBB01, 0X7BC0, 0X7A80, 0XBA41,
+			0XBE01, 0X7EC0, 0X7F80, 0XBF41, 0X7D00, 0XBDC1, 0XBC81, 0X7C40,
+			0XB401, 0X74C0, 0X7580, 0XB541, 0X7700, 0XB7C1, 0XB681, 0X7640,
+			0X7200, 0XB2C1, 0XB381, 0X7340, 0XB101, 0X71C0, 0X7080, 0XB041,
+			0X5000, 0X90C1, 0X9181, 0X5140, 0X9301, 0X53C0, 0X5280, 0X9241,
+			0X9601, 0X56C0, 0X5780, 0X9741, 0X5500, 0X95C1, 0X9481, 0X5440,
+			0X9C01, 0X5CC0, 0X5D80, 0X9D41, 0X5F00, 0X9FC1, 0X9E81, 0X5E40,
+			0X5A00, 0X9AC1, 0X9B81, 0X5B40, 0X9901, 0X59C0, 0X5880, 0X9841,
+			0X8801, 0X48C0, 0X4980, 0X8941, 0X4B00, 0X8BC1, 0X8A81, 0X4A40,
+			0X4E00, 0X8EC1, 0X8F81, 0X4F40, 0X8D01, 0X4DC0, 0X4C80, 0X8C41,
+			0X4400, 0X84C1, 0X8581, 0X4540, 0X8701, 0X47C0, 0X4680, 0X8641,
+			0X8201, 0X42C0, 0X4380, 0X8341, 0X4100, 0X81C1, 0X8081, 0X4040 };
+
+	unsigned char nTemp;
+	unsigned short int wCRCWord = 0xFFFF;
+
+	while (wLength--)
+	{
+		nTemp = *nData++ ^ wCRCWord;
+		wCRCWord >>= 8;
+		wCRCWord ^= wCRCTable[nTemp];
+	}
+	return wCRCWord;
+
+}
+
+char USART1_read()
+{
+	char data=0;
+	//wait while RX buffer is data is ready to be read
+	while(!(USART1->SR&0x0020)){} 	//Bit 5 RXNE: Read data register not empty
+	data=USART1->DR;			//p739
+	return data;
+}
+
+char USART2_read()
+{
+	char data=0;
+	//wait while RX buffer is data is ready to be read
+	while(!(USART2->SR&0x0020)){} 	//Bit 5 RXNE: Read data register not empty
+	data=USART2->DR;			//p739
+	return data;
+}
+
+void wrong_slave_address(void)
+{
+	USART1->CR1 &= ~0x00000004;		//RE bit. p739-740. Disable receiver
+	delay_Ms(10); 					//time=1/9600 x 10 bits x 7 byte = 7,29 ms
+	USART1->CR1 |= 0x00000004;		//RE bit. p739-740. Enable receiver
+	USART1->CR1 |= 0x0020;			//enable RX interrupt
+	mFlag=0;
+}
+
+
+void read_7_bytes_from_usartx(char *received_frame)
+{
+	char frame[7]={0};
+	uint8_t i=0;
+
+	while(i<7)
+	{
+		*received_frame=USART1_read();
+		frame[i]=*received_frame;
+		received_frame++;
+		i++;
+	}
+	write_debug_frame(frame, 7);
+}
+
+int read_sensor(int input_address)
+{
+	//if(input_address==0x01)
+	int result=0;
+	ADC1->CR2|=0x40000000;	//start conversion
+	while(!(ADC1->SR & 2)){}	//wait for conversion complete
+	result=ADC1->DR;			//read conversion result
+	return result;
+}
+
+void respond_frame(int sensor_value)
+{
+	GPIOA->ODR|=0x20;				//led on, transmitting mode
+	//example response should be like this: 0104020B057E03
+	char respond_frame[7]={SLAVE_ADDRESS,0x04,0x02,0,0,0,0};
+	char sensor_high_bits=0;
+	char sensor_low_bits=0;
+	char crc_high_byte=0;
+	char crc_low_byte=0;
+	unsigned short int crc=0; //16 bits
+
+	sensor_high_bits=(sensor_value>>8)|sensor_high_bits;
+	sensor_low_bits=sensor_value|sensor_low_bits;
+	respond_frame[3]=sensor_high_bits;
+	respond_frame[4]=sensor_low_bits;
+	crc=CRC16(respond_frame,5);
+	crc_high_byte=(crc>>8)|crc_high_byte; //high byte
+	crc_low_byte=crc|crc_low_byte; //low byte
+
+	respond_frame[6]=crc_high_byte;
+	respond_frame[5]=crc_low_byte;
+
+	for(int i=0;i<7;i++)
+	{
+		//blink_led();
+		led_on();
+		USART1_write(respond_frame[i]);
+	}
+	write_debug_frame(respond_frame, 7);
+	led_off();
+	GPIOA->ODR&=~0x20;				//led off, receiving mode
+
+}
+
+/**
+ * Initialize LED
+ */
+void LED_Init()
+{
+	GPIOA->MODER|=0x400; //GPIOA pin 5 to output. p184
+}
+
+/**
+ * Debug write a string to debug terminal
+ */
+void write_debug_msg(char *str, int maxchars)
+{
+	int i = 0;
+	while(str[i] != '\0') {
+		USART2_write(str[i]);
+		if (++i == maxchars)
+			break;
+	}
+	USART2_write('\r');
+	USART2_write('\n');
+}
+
+char bytestr[] = {'0', '1', '2', '3', '4','5','6','7','8','9','a','b','c','d','e','f'};
+
+/**
+ * Write Modbus frame bytes to debug terminal
+ */
+void write_debug_frame(char *str, int maxchars)
+{
+	int i;
+	for (i=0;i<8;i++) {
+		USART2_write('0');
+		USART2_write('x');
+		USART2_write(bytestr[(str[i] & 0xf0) >> 4]);
+		USART2_write(bytestr[str[i] & 0x0f]);
+		USART2_write(44);
+	}
+	USART2_write('\r');
+	USART2_write('\n');
+}
+
+
+uint8_t led_value = 0;
+
+/**
+ * Just turn led on/off, depending on previous state
+ */
+void blink_led()
+{
+	if (!led_value) {
+		led_on();
+	} else {
+		led_off();
+	}
+	led_value = !led_value;
+}
+
+
